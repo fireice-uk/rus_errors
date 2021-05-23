@@ -86,9 +86,9 @@ fn fun_needs_zero(number: u32) -> Result<(), Box<dyn Error>> {
 
 fn error_prone_fun() -> Result<(), Box<dyn Error>> {
     let mut line = String::new();
-    std::io::stdin().read_line(&mut line).or_else(|err| {
-        return Err(err);
-    }).unwrap(); // any way to make ? operator work here
+    if let Err(err) = std::io::stdin().read_line(&mut line) {
+        return Err(Box::new(err));
+    }; // any way to make ? operator work here
 
     let line: u32 = line.trim().parse()?;
     fun_needs_zero(line)
